@@ -35,11 +35,11 @@ super + R
     tbctl --remove-desktop
 
 XF86ScreenSaver
-    $LOCK_SCREEN
+    slimlock
 XF86Sleep
-    systemctl suspend & $LOCK_SCREEN
+    systemctl suspend & slimlock
 super + S ; H
-    systemctl hibernate & $LOCK_SCREEN
+    systemctl hibernate & slimlock
 super + S ; {P, R}
     {poweroff, reboot}
 
