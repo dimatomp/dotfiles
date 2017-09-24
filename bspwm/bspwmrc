@@ -19,4 +19,4 @@ export PANEL_FONT_FAMILY='Droid Sans Mono:size=9'
 
 $SXHKD_SHELL &
 
-exec panel &>$HOME/panel.err
+exec ~/.config/bspwm/panel &>~/panel.err

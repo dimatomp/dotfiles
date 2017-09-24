@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 let
-  addSkb = {stdenv, fetchFromGitHub, xlibs, dotfiles}:
+  addSkb = {stdenv, fetchFromGitHub, xlibs}:
     stdenv.mkDerivation rec {
       name = "skb";
     
@@ -19,7 +19,7 @@ let
       CFLAGS = "-w";
     
       prePatch = ''sed -i "s@/usr@$out@" config.mk'';
-      patches = [ ${dotfiles}/etc/nixos/skb-cflags.patch ];
+      patches = [ ./skb-cflags.patch ];
     };
   addTompebar = {stdenv, mkDerivation, fetchFromGitHub, base, directory, network, process}:
     mkDerivation {
@@ -36,15 +36,6 @@ let
       executableHaskellDepends = [ base directory network process ];
       description = "An enhancement for the bspwm desktop environment. Divides the desktop list into workspaces for better multitasking.";
       license = stdenv.lib.licenses.free;
-    };
-  dotfiles = {stdenv, mkDerivation, fetchFromGitHub, tompebar, xtitle, bar-xft, trayer, dmenu, skb, sakura, acpi}:
-    mkDerivation {
-      pname = "dotfiles";
-      src = fetchFromGitHub {
-        owner = "dimatomp";
-        repo = "dotfiles";
-      };
-      buildInputs = [tompebar xtitle bar-xft trayer dmenu skb sakura acpi];
     };
 in
 {
@@ -77,7 +68,6 @@ in
 
   nixpkgs.config.packageOverrides = pkgs: with pkgs; rec {
     skb = callPackage addSkb {};
-    dotfiles = callPackage dotfiles {tompebar = haskellPackages.tompebar};
   };
  
   nixpkgs.config.firefox = {
@@ -89,7 +79,7 @@ in
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    dotfiles
+    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi
     pavucontrol networkmanagerapplet firefox filelight
   ];
 
@@ -104,18 +94,12 @@ in
   };
 
   # List services that you want to enable:
-  #services.samba.enable = true;
-  #services.printing.enable = true;
   services.openssh.enable = true;
   services.xserver = {
     enable = true;
     layout = "us,ru";
     windowManager = {
-      bspwm = {
-        enable = true;
-        configFile = "${pkgs.dotfiles}/etc/bspwm/bspwmrc";
-        sxhkd.configFile = "${pkgs.dotfiles}/etc/sxhkd/sxhkdrc";
-      };
+      bspwm.enable = true;
       default = "bspwm";
     };
     xkbOptions = "grp:caps_toggle";
