@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+if [ $(pgrep -cx panel) -gt 1 ] ; then
+	printf "%s\n" "The panel is already running." >&2
+	exit 1
+fi
+
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+BAR_AINT_RECURSIVE=lemonbar
+
+if [ -z $PANEL_FIFO ]; then
+    PANEL_FIFO="/tmp/panel_fifo"
+fi
+[ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
+mkfifo "$PANEL_FIFO"
+if [ -z $BOTTOM_FIFO ]; then
+    BOTTOM_FIFO="/tmp/bottom_fifo"
+fi
+[ -e "$BOTTOM_FIFO" ] && rm "$BOTTOM_FIFO"
+mkfifo "$BOTTOM_FIFO"
+
+bspc config top_padding $PANEL_HEIGHT
+bspc config bottom_padding $PANEL_HEIGHT
+bspc subscribe report | tompebar "B" 1>"$BOTTOM_FIFO" 2>~/tompebar.err &
+xtitle -sf 'T%s' > "$PANEL_FIFO" &
+skb | awk '{print "L"$1; fflush()}' >"$PANEL_FIFO" &
+
+if [[ "$(uname -v)" != *"NixOS"* ]]; then
+    ./dbus_nm_status N >"$PANEL_FIFO" &
+else
+    nix-shell -p dbus-nm-status --run "./dbus_nm_status N" >"$PANEL_FIFO" &
+fi
+
+function clock() {
+    while true; do
+        charge="$(acpi --battery | awk '{print $3, $4}')"
+        state="$(echo $charge | grep -o -P '\w+(?=,)')"
+        chargenum="$(echo $charge | grep -o -P '\d+(?=%)')"
+        if (! [[ "$state" =~ ^(|Charging|Full|Unknown)$ ]]) && (( $chargenum <= 15 )); then
+            systemctl hibernate & $LOCK_SCREEN
+        fi
+        echo "S${charge%?} | $(date +'%c')" >"$PANEL_FIFO"
+        sleep 1
+    done
+}
+clock &
+
+trayer_width=70
+
+cat "$PANEL_FIFO" | ./panel_bar | $BAR_AINT_RECURSIVE -g $((1366-$trayer_width))x$PANEL_HEIGHT -f "$PANEL_FONT_FAMILY" -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+trayer --align right --edge top --height 15 --widthtype pixel --width $trayer_width --transparent true --alpha 0 --tint '0x34322E' &
+cat "$BOTTOM_FIFO" | ./bottom_bar | $BAR_AINT_RECURSIVE -b -g 1366x$PANEL_HEIGHT -f "$PANEL_FONT_FAMILY" -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+
+wait
