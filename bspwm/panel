@@ -8,6 +8,7 @@ fi
 trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
 
 cd ~/.config/bspwm
+. ./panel_colors
 
 BAR_AINT_RECURSIVE=lemonbar
 

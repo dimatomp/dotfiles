@@ -35,3 +35,6 @@ call SetupVAM()
 " OPTION 3: Create a file ~/.vim-scripts putting a PLUGIN_NAME into each line
 " See lazy loading plugins section in README.md for details
 call vam#Scripts('/home/dimatomp/.vim-scripts', {'tag_regex': '.*'})
+
+set expandtab
+set tabstop=4
