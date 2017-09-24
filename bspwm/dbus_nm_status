@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python35Packages.dbus-python python35Packages.pygobject3
 
 import dbus
 import gi.repository.GObject

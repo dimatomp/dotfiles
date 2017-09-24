@@ -79,7 +79,7 @@ in
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi
+    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi python35 python35Packages.dbus-python python35Packages.pygobject3
     pavucontrol networkmanagerapplet firefox filelight
   ];
 

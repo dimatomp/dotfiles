@@ -57,10 +57,6 @@ in {
         extraLibs = with python.pkgs; [ notebook pandas matplotlib scikitlearn ipykernel pymorphy2 mmh3 protobuf3_2 ];
         ignoreCollisions = true;
       };
-    dbus-nm-status = buildEnv {
-      name = "dbus-nm-status";
-      paths = with python35Packages; [ python35 dbus-python pygobject3 ];
-    };
     texliveSetup = texlive.combine {
       inherit (texlive) scheme-basic collection-langcyrillic collection-langgerman collection-fontsrecommended metafont listings caption adjustbox xkeyval upquote collectbox ucs fancyvrb booktabs ulem extsizes csquotes tabu varwidth floatrow algorithms algorithmicx enumitem setspace biber biblatex iftex lastpage totcount longfigure chngcntr titlesec paratype logreq xstring biblatex-gost was pgf ms filecontents;
     };
