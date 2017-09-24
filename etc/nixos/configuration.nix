@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 let
-  addSkb = {stdenv, fetchFromGitHub, xlibs}:
+  addSkb = {stdenv, fetchFromGitHub, xlibs, dotfiles}:
     stdenv.mkDerivation rec {
       name = "skb";
     
@@ -19,7 +19,7 @@ let
       CFLAGS = "-w";
     
       prePatch = ''sed -i "s@/usr@$out@" config.mk'';
-      patches = [ ./skb-cflags.patch ];
+      patches = [ ${dotfiles}/etc/nixos/skb-cflags.patch ];
     };
   addTompebar = {stdenv, mkDerivation, fetchFromGitHub, base, directory, network, process}:
     mkDerivation {
@@ -36,6 +36,15 @@ let
       executableHaskellDepends = [ base directory network process ];
       description = "An enhancement for the bspwm desktop environment. Divides the desktop list into workspaces for better multitasking.";
       license = stdenv.lib.licenses.free;
+    };
+  dotfiles = {stdenv, mkDerivation, fetchFromGitHub, tompebar, xtitle, bar-xft, trayer, dmenu, skb, sakura, acpi}:
+    mkDerivation {
+      pname = "dotfiles";
+      src = fetchFromGitHub {
+        owner = "dimatomp";
+        repo = "dotfiles";
+      };
+      buildInputs = [tompebar xtitle bar-xft trayer dmenu skb sakura acpi];
     };
 in
 {
@@ -66,33 +75,9 @@ in
     tompebar = self.callPackage addTompebar {};
   };
 
-  nixpkgs.config.packageOverrides = pkgs: rec {
-    skb = with pkgs; callPackage addSkb {};
-    #bar-xft = pkgs.bar-xft.overrideDerivation (old: {
-    #  name = "bar-xft-git-2016-11-07";
-    #  src = pkgs.fetchFromGitHub {
-    #    owner = "krypt-n";
-    #    repo = "bar";
-    #    rev = "043ad4757cc079666f50212ee0a2ef0729ecac6b";
-    #    sha256 = "0plarlqdc54xlhz4np1xr231xs4lkhgaphrqzycljav35wskpsc8";
-    #  };
-    #});
-    #mariadb-beta = pkgs.mariadb.overrideDerivation (old: { 
-    #  name = "mariadb-10.2.2b";
-    #  version = "10.2.2";
-    #  src = pkgs.fetchurl {
-    #    url    = "https://downloads.mariadb.org/interstitial/mariadb-10.2.2/source/mariadb-10.2.2.tar.gz";
-    #    sha256 = "0fl9dymb3kqsrydxmdkmg0x9pna6ayhvhz0f6g0iylg4g8srxksm";
-    #  };
-    #  cmakeFlags = old.cmakeFlags ++ [ "-DWITH_DEBUG=1" ];
-    #  enableParallelBuilding = true;
-    #  postInstall = ''
-    #    rm "$out"/lib/*.a
-    #    find "''${!outputBin}/bin" -name '*test*' -delete
-    #    rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
-    #    rm "$out"/share/man/man1/mysql-test-run.pl.1
-    #  '';
-    #});
+  nixpkgs.config.packageOverrides = pkgs: with pkgs; rec {
+    skb = callPackage addSkb {};
+    dotfiles = callPackage dotfiles {tompebar = haskellPackages.tompebar};
   };
  
   nixpkgs.config.firefox = {
@@ -104,8 +89,7 @@ in
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    haskellPackages.tompebar 
-    acpi xtitle bar-xft trayer sakura dmenu skb sselp #i3lock
+    dotfiles
     pavucontrol networkmanagerapplet firefox filelight
   ];
 
@@ -127,7 +111,11 @@ in
     enable = true;
     layout = "us,ru";
     windowManager = {
-      bspwm.enable = true;
+      bspwm = {
+        enable = true;
+        configFile = "${pkgs.dotfiles}/etc/bspwm/bspwmrc";
+        sxhkd.configFile = "${pkgs.dotfiles}/etc/sxhkd/sxhkdrc";
+      };
       default = "bspwm";
     };
     xkbOptions = "grp:caps_toggle";
@@ -162,20 +150,8 @@ in
     ll = "ls -lah";
   };
 
-  environment.variables = {
-    _JAVA_AWT_WM_NONREPARENTING="1";
-    LOCK_SCREEN = "slimlock";
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.extraUsers.guest = {
-  #   isNormalUser = true;
-  #   uid = 1000;
-  # };
-
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "17.03";
-  #system.stateVersion = "16.09";
   nix.buildCores = 0;
 
 }
