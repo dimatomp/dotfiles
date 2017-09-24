@@ -12,7 +12,7 @@ while read -r line ; do
             ;;
         S*)
             # clock output
-            sys_infos="%{F$COLOR_SYS_FG}%{B$COLOR_SYS_BG} ${line#?} %{B-}%{F-}"
+            sys_infos="%{F$COLOR_DEFAULT_FG}%{B$COLOR_DEFAULT_BG} ${line#?} %{B-}%{F-}"
             ;;
         T*)
             # xtitle output
@@ -20,7 +20,7 @@ while read -r line ; do
             ;;
         L*)
             # keyboard layout
-            layout="%{F$COLOR_SYS_FG}%{B$COLOR_SYS_BG} ${line#?} %{B-}%{F-}"
+            layout="%{F$COLOR_DEFAULT_FG}%{B$COLOR_DEFAULT_BG} ${line#?} %{B-}%{F-}"
     esac
     printf "%s\n" "%{l}${title}%{r}| ${layout} | ${network} |${sys_infos}|" || exit
 done
