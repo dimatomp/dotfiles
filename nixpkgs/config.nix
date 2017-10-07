@@ -39,18 +39,7 @@ let
   };
 in {
   packageOverrides = pkgs: with pkgs; rec {
-    #dropbox-cli = pkgs.dropbox-cli.overrideDerivation (old: 
-    #  let version = "2.10.0"; in
-    #  {
-    #    name = "dropbox-cli-${version}";
-    #    src = fetchurl {
-    #      url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
-    #      sha256 = "1ai6vi5227z2ryxl403693xi63b42ylyfmzh8hbv4shp69zszm9c";
-    #    };
-    #  }
-    #);
     python3Setup = python35.withPackages (ps: with ps; [ notebook pandas matplotlib scikitlearn ipykernel ]);
-    #python2Setup = python27.withPackages (ps: with ps; [ notebook pandas matplotlib scikitlearn ipykernel ]);
     python2Setup = 
       let python = python27.override { packageOverrides = callPackage pythonPackageOverrides {}; };
       in python.buildEnv.override {

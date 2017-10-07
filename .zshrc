@@ -62,4 +62,8 @@ function office2pdf() {
     cp /var/spool/cups-pdf/dimatomp/*.pdf .
 }
 
+function curlTrack() {
+    eval "$(sselp | sed 's/ --2.0//')" >$1
+}
+
 #export PUUSH_API_KEY=DAB228360195BA824019E69DB5934BC7

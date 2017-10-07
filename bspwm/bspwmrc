@@ -11,12 +11,12 @@ bspc config focused_border_color red
 bspc config window_gap 0
 bspc monitor -d 'itmo$browser' 'itmo$email'
 
-slimlock
-
 export PANEL_FIFO=/tmp/panel_fifo
 export PANEL_HEIGHT=15
 export PANEL_FONT_FAMILY='Droid Sans Mono:size=9'
 
-$SXHKD_SHELL &
+~/.config/bspwm/panel &>~/panel.err &
 
-exec ~/.config/bspwm/panel &>~/panel.err
+slimlock
+
+exec $SXHKD_SHELL
