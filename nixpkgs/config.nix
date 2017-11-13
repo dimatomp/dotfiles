@@ -39,13 +39,13 @@ let
   };
 in {
   packageOverrides = pkgs: with pkgs; rec {
-    python3Setup = python35.withPackages (ps: with ps; [ notebook pandas matplotlib scikitlearn ipykernel ]);
-    python2Setup = 
-      let python = python27.override { packageOverrides = callPackage pythonPackageOverrides {}; };
-      in python.buildEnv.override {
-        extraLibs = with python.pkgs; [ notebook pandas matplotlib scikitlearn ipykernel pymorphy2 mmh3 protobuf3_2 ];
-        ignoreCollisions = true;
-      };
+    python3Setup = python35.withPackages (ps: with ps; [ notebook matplotlib scipy /* pandas scikitlearn */ ipykernel ]);
+    python2Setup = python27.withPackages (ps: with ps; [ notebook matplotlib scipy /* pandas scikitlearn */ ipykernel ]);
+      #let python = python27.override { packageOverrides = callPackage pythonPackageOverrides {}; };
+      #in python.buildEnv.override {
+      #  extraLibs = with python.pkgs; [ notebook pandas matplotlib scikitlearn ipykernel pymorphy2 mmh3 protobuf3_2 ];
+      #  ignoreCollisions = true;
+      #};
     texliveSetup = texlive.combine {
       inherit (texlive) scheme-basic collection-langcyrillic collection-langgerman collection-fontsrecommended metafont listings caption adjustbox xkeyval upquote collectbox ucs fancyvrb booktabs ulem extsizes csquotes tabu varwidth floatrow algorithms algorithmicx enumitem setspace biber biblatex iftex lastpage totcount longfigure chngcntr titlesec paratype logreq xstring biblatex-gost was pgf ms filecontents;
     };
