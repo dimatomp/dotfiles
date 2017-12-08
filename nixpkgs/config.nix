@@ -39,8 +39,8 @@ let
   };
 in {
   packageOverrides = pkgs: with pkgs; rec {
-    python3Setup = python35.withPackages (ps: with ps; [ notebook matplotlib scipy /* pandas scikitlearn */ ipykernel ]);
-    python2Setup = python27.withPackages (ps: with ps; [ notebook matplotlib scipy /* pandas scikitlearn */ ipykernel ]);
+    python3Setup = python35.withPackages (ps: with ps; [ notebook matplotlib scipy pandas scikitlearn graphviz ipykernel ]);
+    python2Setup = python27.withPackages (ps: with ps; [ notebook matplotlib scipy pandas scikitlearn ipykernel ]);
       #let python = python27.override { packageOverrides = callPackage pythonPackageOverrides {}; };
       #in python.buildEnv.override {
       #  extraLibs = with python.pkgs; [ notebook pandas matplotlib scikitlearn ipykernel pymorphy2 mmh3 protobuf3_2 ];

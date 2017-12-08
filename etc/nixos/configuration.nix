@@ -71,7 +71,7 @@ in
   };
  
   nixpkgs.config.firefox = {
-    enableGoogleTalkPlugin = true;
+    #enableGoogleTalkPlugin = true;
     enableAdobeFlash = true;
   };
 
@@ -80,7 +80,7 @@ in
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
     haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi python35 python35Packages.dbus-python python35Packages.pygobject3
-    pavucontrol networkmanagerapplet firefox filelight
+    pavucontrol networkmanagerapplet firefox-esr filelight
   ];
 
   fonts = {
@@ -108,12 +108,6 @@ in
       user = "dimatomp";
     };
   };
-  services.mysql = {
-    enable = false;
-    package = pkgs.mariadb;
-  };
-  services.postgresql.enable = false;
-  virtualisation.docker.enable = false;
   networking.networkmanager.enable = true;
 
   services.logind.extraConfig = ''
