@@ -72,14 +72,14 @@ in
  
   nixpkgs.config.firefox = {
     #enableGoogleTalkPlugin = true;
-    enableAdobeFlash = true;
+    #enableAdobeFlash = true;
   };
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi python35 python35Packages.dbus-python python35Packages.pygobject3
+    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi python35 python36Packages.dbus-python python36Packages.pygobject3
     pavucontrol networkmanagerapplet firefox-esr filelight
   ];
 

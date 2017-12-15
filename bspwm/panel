@@ -36,7 +36,7 @@ function clock() {
         charge="$(acpi --battery | awk '{print $3, $4}')"
         state="$(echo $charge | grep -o -P '\w+(?=,)')"
         chargenum="$(echo $charge | grep -o -P '\d+(?=%)')"
-        if (! [[ "$state" =~ ^(|Charging|Full|Unknown)$ ]]) && (( $chargenum <= 10 )); then
+        if (! [[ "$state" =~ ^(|Charging|Full|Unknown)$ ]]) && (( $chargenum <= 15 )); then
             systemctl hibernate & $LOCK_SCREEN
         fi
         echo "S${charge%?} | $(date +'%c')" >"$PANEL_FIFO"
