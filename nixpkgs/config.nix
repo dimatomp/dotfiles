@@ -50,6 +50,10 @@ in {
       inherit (texlive) scheme-basic collection-langcyrillic collection-langgerman collection-fontsrecommended metafont listings caption adjustbox xkeyval upquote collectbox ucs fancyvrb booktabs ulem extsizes csquotes tabu varwidth floatrow algorithms algorithmicx enumitem setspace biber biblatex iftex lastpage totcount longfigure chngcntr titlesec paratype logreq xstring biblatex-gost was pgf ms filecontents;
     };
     haskellSetup = ghc; #haskellPackages.ghcWithPackages (p: with p; [ ]);
+    #pulse-secure = callPackage ./pulse-secure.nix {};
+    soxMp3 = sox.override { enableLame = true; };
+    wine64 = with import <nixos_unstable> {}; winePackages.unstable.override { wineBuild = "wine64"; };
+    wine32 = with import <nixos_unstable> {}; winePackages.unstable;
   };
   allowUnfree = true;
 }

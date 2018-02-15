@@ -71,6 +71,9 @@ super + !button{1,3}
 super + @button{1,3}
     bspc pointer -u
 
+super + p
+    pavucontrol
+
 super + shift + button{4,5}
     bspc config -d focused window_gap $((`bspc config -d focused node_gap` {+,-} 1))
 super + shift + {underscore,equal}
