@@ -37,6 +37,18 @@ let
       description = "An enhancement for the bspwm desktop environment. Divides the desktop list into workspaces for better multitasking.";
       license = stdenv.lib.licenses.free;
     };
+  olderBspwm = {fetchFromGitHub, bspwm}: 
+    bspwm.overrideAttrs (oldAttrs: rec {
+      name = "bspwm-${version}";
+      version = "0.9";
+
+      src = fetchFromGitHub {
+        owner  = "baskerville";
+        repo   = "bspwm";
+        rev    = version;
+        sha256 = "0vsggbx9lh27ndfiayca94fx67jpzdnaz58ghm9qknlgx9fd2d5l";
+      };
+    });
 in
 {
   imports =
@@ -68,18 +80,19 @@ in
 
   nixpkgs.config.packageOverrides = pkgs: with pkgs; rec {
     skb = callPackage addSkb {};
+    bspwm090 = callPackage olderBspwm {};
   };
  
   nixpkgs.config.firefox = {
     #enableGoogleTalkPlugin = true;
-    #enableAdobeFlash = true;
+    enableAdobeFlash = true;
   };
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi python35 python36Packages.dbus-python python36Packages.pygobject3
+    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi python35 python36Packages.dbus-python python36Packages.pygobject3 bc
     pavucontrol networkmanagerapplet firefox-esr filelight
   ];
 
@@ -89,6 +102,7 @@ in
     fonts = with pkgs; [
       corefonts
       google-fonts
+      vistafonts
       dejavu_fonts
     ];
   };
@@ -99,7 +113,10 @@ in
     enable = true;
     layout = "us,ru";
     windowManager = {
-      bspwm.enable = true;
+      bspwm = {
+        enable = true;
+        package = pkgs.bspwm090;
+      };
       default = "bspwm";
     };
     xkbOptions = "grp:caps_toggle";

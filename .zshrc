@@ -69,3 +69,6 @@ function curl-track() {
 }
 
 #export PUUSH_API_KEY=DAB228360195BA824019E69DB5934BC7
+
+# OPAM configuration
+. /home/dimatomp/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

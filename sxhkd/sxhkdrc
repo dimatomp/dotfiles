@@ -5,17 +5,17 @@ super + r
 super + w
     nmcli_dmenu
 super + {j, k}
-    bspc node -f {next, prev}.local
+    bspc window -f {next, prev}.local
 super + S; Q
     pkill -x panel; bspc quit
 super + C
-    bspc node focused -c
+    bspc window focused -c
 super + S; K
-    bspc node -k
+    bspc window -k
 alt + {h, j, k, l, grave}
-    bspc node -p {west, south, north, east, cancel}
+    bspc window -p {west, south, north, east, cancel}
 super + {f, t}
-    bspc node -t {floating, tiled}
+    bspc window -t {floating, tiled}
 
 super + {h, l}
     tbctl --switch-desktop {prev,next}
@@ -30,7 +30,7 @@ super + {W, D}
 super + N; {W, D}
     tbctl --rename-{workspace,desktop} `dmenu -b -fn "Droid Sans Mono:size=8"`
 super + E
-    desk=`bspc query -D | sort | dmenu -b -fn "Droid Sans Mono:size=8"` && bspc node -d $desk
+    desk=`bspc query -D | sort | dmenu -b -fn "Droid Sans Mono:size=8"` && bspc window -d $desk
 super + R
     tbctl --remove-desktop
 
@@ -51,18 +51,17 @@ XF86AudioMute
     amixer set Master toggle
 
 super + {J, K}
-    bspc node -s {next, prev}.local
-# TODO Have not figured out why those commands produce no effect
-#alt + {J, L}; {1-9}
-#    bspc node -r {down, right} "0.{1-9}"
-#alt + {H, K}; {1-9}
-#    bspc node -r {left, up} "0.$((10-{1-9}))"
-#alt + {J, L}; backslash
-#    bspc node -e {down, right} $(echo `dmenu -b -fn "Droid Sans Mono:size=8" </dev/null` | bc -l)
-#alt + {H, K}; backslash
-#    bspc node -e {left, up} $(echo "1-(`dmenu -b -fn "Droid Sans Mono:size=8" </dev/null`)" | bc -l)
-#alt + {H, J, K, L} ; {0, minus, equal}
-#    bspc node -R {left, down, up, right} {270, 180, 90}
+    bspc window -s {next, prev}.local
+alt + {J, L}; {1-9}
+    bspc window -e {down, right} "0.{1-9}"
+alt + {H, K}; {1-9}
+    bspc window -e {left, up} "0.$((10-{1-9}))"
+alt + {J, L}; backslash
+    bspc window -e {down, right} $(echo `dmenu -b -fn "Droid Sans Mono:size=8" </dev/null` | bc -l)
+alt + {H, K}; backslash
+    bspc window -e {left, up} $(echo "1-(`dmenu -b -fn "Droid Sans Mono:size=8" </dev/null`)" | bc -l)
+alt + {H, J, K, L} ; {0, minus, equal}
+    bspc window -R {left, down, up, right} {270, 180, 90}
 
 super + button{1,3}
     bspc pointer -g {move, resize_corner}
@@ -75,6 +74,6 @@ super + p
     pavucontrol
 
 super + shift + button{4,5}
-    bspc config -d focused window_gap $((`bspc config -d focused node_gap` {+,-} 1))
+    bspc config -d focused window_gap $((`bspc config -d focused window_gap` {+,-} 1))
 super + shift + {underscore,equal}
     bspc config -d focused window_gap {0,6}

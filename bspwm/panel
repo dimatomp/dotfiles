@@ -25,7 +25,7 @@ mkfifo "$BOTTOM_FIFO"
 
 bspc config top_padding $PANEL_HEIGHT
 bspc config bottom_padding $PANEL_HEIGHT
-bspc subscribe report | tompebar "B" 1>"$BOTTOM_FIFO" 2>~/tompebar.err &
+bspc control --subscribe | tompebar "B" 1>"$BOTTOM_FIFO" 2>~/tompebar.err &
 xtitle -sf 'T%s' > "$PANEL_FIFO" &
 skb | awk '{print "L"$1; fflush()}' >"$PANEL_FIFO" &
 
