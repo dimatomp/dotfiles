@@ -49,6 +49,26 @@ let
         sha256 = "0vsggbx9lh27ndfiayca94fx67jpzdnaz58ghm9qknlgx9fd2d5l";
       };
     });
+  dbusNMStatus = {stdenv, buildPythonApplication, fetchFromGitHub, dbus-python, pygobject3}:
+    buildPythonApplication rec {
+      pname ="dbus-nm-status";
+      name = "${pname}-${version}";
+      version = "0.1";
+
+      src = fetchFromGitHub {
+        owner = "dimatomp";
+        repo = "DBusNMStatus";
+        rev = "8d456aceab807265321dbf6eec322baac71afb56";
+        sha256 = "0w3rp7wv76jkqdn5wbv4cq174f5xap9gjfvaam1h4yk0pxssrkmw";
+      };
+
+      propagatedBuildInputs = [ dbus-python pygobject3 ];
+
+      meta = with stdenv.lib; {
+        description = "A script that prints SSID and signal strength of current Wi-Fi connection in readable format";
+        homepage = http://github.com/dimatomp/DBusNMStatus;
+      };
+    };
 in
 {
   imports =
@@ -81,6 +101,7 @@ in
   nixpkgs.config.packageOverrides = pkgs: with pkgs; rec {
     skb = callPackage addSkb {};
     bspwm090 = callPackage olderBspwm {};
+    dbus-nm-status = with python36Packages; callPackage dbusNMStatus {};
   };
  
   nixpkgs.config.firefox = {
@@ -92,7 +113,7 @@ in
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi python35 python36Packages.dbus-python python36Packages.pygobject3 bc
+    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi dbus-nm-status bc
     pavucontrol networkmanagerapplet firefox-esr filelight
   ];
 
