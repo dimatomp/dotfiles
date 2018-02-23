@@ -13,7 +13,7 @@ super + C
 super + S; K
     bspc window -k
 alt + {h, j, k, l, grave}
-    bspc window -p {west, south, north, east, cancel}
+    bspc window -p {left, down, up, right, cancel}
 super + {f, t}
     bspc window -t {floating, tiled}
 

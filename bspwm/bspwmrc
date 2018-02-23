@@ -20,4 +20,4 @@ export PANEL_FONT_FAMILY='Droid Sans Mono:size=9'
 
 slimlock
 
-WINDOW=$([[ $(bspwm -version) == 0.9 ]] && echo window || echo node) exec sxhkd
+exec sxhkd
