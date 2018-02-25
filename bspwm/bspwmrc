@@ -3,6 +3,8 @@
 numlockx on
 setxkbmap "us,ru" -option grp:caps_toggle
 
+slimlock
+
 feh --bg-fill ~/IMG_2363_cropped.JPG
 perWindowLayoutD
 xcompmgr &
@@ -17,7 +19,5 @@ export PANEL_HEIGHT=15
 export PANEL_FONT_FAMILY='Droid Sans Mono:size=9'
 
 ~/.config/bspwm/panel &>~/panel.err &
-
-slimlock
 
 exec sxhkd

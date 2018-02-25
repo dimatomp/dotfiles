@@ -39,7 +39,7 @@ let
   };
 in {
   packageOverrides = pkgs: with pkgs; rec {
-    python3Setup = python35.withPackages (ps: with ps; [ numpy scipy ]);
+    python3Setup = python3.withPackages (ps: with ps; [ numpy scipy ]);
     python2Setup = python2.buildEnv.override {
       extraLibs = with python2.pkgs; [ numpy (matplotlib.override {enableGtk2 = true;}) scipy ];
       ignoreCollisions = true;
