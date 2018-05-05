@@ -113,7 +113,7 @@ in
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi dbus-nm-status bc
+    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi dbus-nm-status bc i3lock feh
     pavucontrol networkmanagerapplet firefox-esr filelight
   ];
 
@@ -165,9 +165,10 @@ in
     dh = "df -h";
     ll = "ls -lah";
   };
+  environment.variables.LOCK_SCREEN = "i3lock";
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "17.03";
+  system.stateVersion = "17.09";
   nix.buildCores = 0;
 
 }

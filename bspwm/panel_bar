@@ -3,6 +3,7 @@
 . ./panel_colors
 
 while read -r line ; do
+    echo $line >> ~/panel_bar.log
     case $line in
         N*)
             network="${line#?}"

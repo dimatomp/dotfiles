@@ -37,9 +37,27 @@ let
       };
     };
   };
+  cloudCross = {qtbase, qmake, curl, stdenv, fetchFromGitHub}: 
+    stdenv.mkDerivation rec {
+      name = "cloudcross-${version}";
+      version = "1.4.2";
+      src = fetchFromGitHub {
+        owner = "MasterSoft24";
+        repo = "CloudCross";
+        rev = "v${version}";
+        sha256 = "1ady2qiii8yygqg0j4mabfjk09idhav20q3w52vqqiqlhjl6q8il";
+      };
+      nativeBuildInputs = [ qmake ];
+      buildInputs = [ qtbase curl ];
+      installPhase = ''
+        mkdir -p $out/bin $out/man/man1
+        cp ccross-app/ccross ccross-curl-executor/ccross-curl $out/bin
+        cp ccross-app/doc/ccross $out/man/man1/ccross.1
+      '';
+    };
 in {
   packageOverrides = pkgs: with pkgs; rec {
-    python3Setup = python3.withPackages (ps: with ps; [ numpy scipy ]);
+    python3Setup = python3.withPackages (ps: with ps; [ notebook pandas matplotlib scikitlearn ipykernel ]);
     python2Setup = python2.buildEnv.override {
       extraLibs = with python2.pkgs; [ numpy (matplotlib.override {enableGtk2 = true;}) scipy ];
       ignoreCollisions = true;
@@ -57,6 +75,12 @@ in {
     soxMp3 = sox.override { enableLame = true; };
     wine64 = with import <nixos_unstable> {}; winePackages.unstable.override { wineBuild = "wine64"; };
     wine32 = with import <nixos_unstable> {}; winePackages.unstable;
+    ocamlEnv = buildFHSUserEnv {
+      name = "ocaml-env";
+      targetPkgs = pkgs: with pkgs; [ ocaml opam gnum4 gnumake curl patch unzip git gcc_multi gdb vim_configurable ];
+    };
+    cloudcross = libsForQt56.callPackage cloudCross {};
   };
+
   allowUnfree = true;
 }

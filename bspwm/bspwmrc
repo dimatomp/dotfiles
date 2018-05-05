@@ -3,7 +3,7 @@
 numlockx on
 setxkbmap "us,ru" -option grp:caps_toggle
 
-slimlock
+$LOCK_SCREEN
 
 feh --bg-fill ~/IMG_2363_cropped.JPG
 perWindowLayoutD

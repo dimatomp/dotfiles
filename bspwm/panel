@@ -26,10 +26,10 @@ mkfifo "$BOTTOM_FIFO"
 bspc config top_padding $PANEL_HEIGHT
 bspc config bottom_padding $PANEL_HEIGHT
 bspc control --subscribe | tompebar "B" 1>"$BOTTOM_FIFO" 2>~/tompebar.err &
-xtitle -sf 'T%s' > "$PANEL_FIFO" &
-skb | awk '{print "L"$1; fflush()}' >"$PANEL_FIFO" &
+xtitle -sf "\nT%s" > "$PANEL_FIFO" &
+skb | awk '{print "\nL"$0; fflush()}' >"$PANEL_FIFO" &
 
-dbus_nm_status N >"$PANEL_FIFO" &
+dbus_nm_status | awk '{ print "\nN"$0; fflush(); }' >"$PANEL_FIFO" &
 
 function clock() {
     while true; do
@@ -39,7 +39,7 @@ function clock() {
         if (! [[ "$state" =~ ^(|Charging|Full|Unknown)$ ]]) && (( $chargenum <= 15 )); then
             systemctl hibernate & $LOCK_SCREEN
         fi
-        echo "S${charge%?} | $(date +'%c')" >"$PANEL_FIFO"
+        echo -e "\nS${charge%?} | $(date +'%c')" >"$PANEL_FIFO"
         sleep 1
     done
 }
