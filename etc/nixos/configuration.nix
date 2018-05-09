@@ -71,6 +71,23 @@ let
         homepage = http://github.com/dimatomp/DBusNMStatus;
       };
     };
+  slWithH = {fetchFromGitHub, sl}:
+    sl.overrideAttrs (oldAttrs: rec {
+      name = "sl-${version}";
+      version = "5.04";
+
+      src = fetchFromGitHub {
+        owner = "beefcurtains";
+        repo = "sl";
+        rev = "a0338aa58afa3be6365d141713df646cc9890dda";
+        sha256 = "1fppc6gxsk29jrw8x0pcwj516dlnyj1pcrzb568glwm9jq4lrd9j";
+      };
+
+      installPhase = ''
+        ${oldAttrs.installPhase}
+        cp sl-h $out/bin
+      '';
+    });
 in
 {
   imports =
@@ -105,6 +122,7 @@ in
     skb = callPackage addSkb {};
     bspwm090 = callPackage olderBspwm {};
     dbus-nm-status = with python36Packages; callPackage dbusNMStatus {};
+    sl504 = callPackage slWithH {};
   };
  
   nixpkgs.config.firefox = {
@@ -116,7 +134,7 @@ in
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi dbus-nm-status bc i3lock feh numlockx sl
+    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi dbus-nm-status bc i3lock feh numlockx sl504
     pavucontrol networkmanagerapplet firefox-esr filelight
   ];
 
