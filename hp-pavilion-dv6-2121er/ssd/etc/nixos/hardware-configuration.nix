@@ -18,17 +18,12 @@
     '';
   };
 
-  boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "firewire_ohci" "usb_storage" "sd_mod" "sr_mod" "sdhci_pci" ];
+  boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "firewire_ohci" "sd_mod" "sr_mod" "sdhci_pci" ];
   boot.kernelModules = [ "kvm-intel" "wl" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
-  services.udev.extraRules = ''
-    ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="deadline"
-    ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="cfq"
-  '';
-
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/35699548-962b-4073-9838-3055288426b3";
+    { device = "/dev/disk/by-uuid/279315d0-67aa-41bf-bcc6-e0a5ce55f40a";
       fsType = "ext4";
       options = [ "rw" "noatime" "discard" ];
     };
@@ -39,27 +34,12 @@
     options = [ "rw" "noatime" "discard" ];
   };
 
-  swapDevices = [ { device = "/dev/disk/by-uuid/e263ccb3-bf6a-47b8-97a2-7b8d7158966f"; } ];
+  swapDevices = [ ];
 
   powerManagement.cpuFreqGovernor = "ondemand";
 
   services.xserver.videoDrivers = [ "nouveau" ];
-  #services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
-  hardware.pulseaudio = {
-    enable = true;
-    package = pkgs.pulseaudioFull;
-    extraConfig = "load-module module-switch-on-connect";
-  };
-  hardware.opengl.driSupport32Bit = true;
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-  };
+  # services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
   services.xserver.synaptics.enable = true;
-  services.logind.lidSwitch = "ignore";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.hostName = "tompe_laptop"; # Define your hostname.
-  services.tor.enable = true;
-
-  nix.maxJobs = lib.mkDefault 4;
 }

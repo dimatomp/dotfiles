@@ -76,6 +76,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./laptop-common.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -115,7 +116,7 @@ in
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget which git htop cifs_utils vim_configurable
-    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi dbus-nm-status bc i3lock feh
+    haskellPackages.tompebar xtitle bar-xft trayer dmenu skb sakura acpi dbus-nm-status bc i3lock feh numlockx
     pavucontrol networkmanagerapplet firefox-esr filelight
   ];
 
