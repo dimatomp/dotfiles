@@ -18,6 +18,6 @@ export PANEL_FIFO=/tmp/panel_fifo
 export PANEL_HEIGHT=15
 export PANEL_FONT_FAMILY='Droid Sans Mono:size=9'
 
-~/.config/bspwm/panel &>~/panel.err &
+~/.config/bspwm/panel &
 
 exec sxhkd

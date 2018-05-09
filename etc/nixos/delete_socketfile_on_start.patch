@@ -1,0 +1,43 @@
+diff --git a/bspwm.c b/bspwm.c
+index 344e1f4..a753492 100644
+--- a/bspwm.c
++++ b/bspwm.c
+@@ -31,6 +31,7 @@
+ #endif
+ #include <sys/wait.h>
+ #include <sys/socket.h>
++#include <sys/stat.h>
+ #include <sys/un.h>
+ #include <signal.h>
+ #include <unistd.h>
+@@ -50,6 +51,21 @@
+ #include "rule.h"
+ #include "bspwm.h"
+ 
++static void delete_socket_if_exists(const char *socket_path)
++{
++	struct stat statbuf;
++	if (stat(socket_path, &statbuf) != 0)
++		return;
++	if (S_ISSOCK(statbuf.st_mode))
++	{
++		warn("Found an existing socket file, removing it.\n");
++		if (remove(socket_path) != 0)
++			err("Failed to remove the existing socket file.\n");
++	}
++	else
++		warn("Found an existing file with socket name, but it's not a socket. Proceeding\n");
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	fd_set descriptors;
+@@ -106,6 +122,8 @@ int main(int argc, char *argv[])
+ 		free(host);
+ 	}
+ 
++	delete_socket_if_exists(socket_path);
++
+ 	sock_address.sun_family = AF_UNIX;
+ 	snprintf(sock_address.sun_path, sizeof(sock_address.sun_path), "%s", socket_path);
+ 

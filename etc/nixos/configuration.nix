@@ -48,6 +48,8 @@ let
         rev    = version;
         sha256 = "0vsggbx9lh27ndfiayca94fx67jpzdnaz58ghm9qknlgx9fd2d5l";
       };
+
+      patches = [ ./delete_socketfile_on_start.patch ];
     });
   dbusNMStatus = {stdenv, buildPythonApplication, fetchFromGitHub, dbus-python, pygobject3}:
     buildPythonApplication rec {
