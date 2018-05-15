@@ -26,7 +26,7 @@ mkfifo "$BOTTOM_FIFO"
 bspc config top_padding $PANEL_HEIGHT
 bspc config bottom_padding $PANEL_HEIGHT
 bspc control --subscribe | tompebar "B" 1>"$BOTTOM_FIFO" 2>~/tompebar.err &
-xtitle -sf "\nT%s" > "$PANEL_FIFO" &
+xtitle | awk '{print "\nT"$0; fflush()}' > "$PANEL_FIFO" &
 skb | awk '{print "\nL"$0; fflush()}' >"$PANEL_FIFO" &
 
 dbus_nm_status | awk '{ print "\nN"$0; fflush(); }' >"$PANEL_FIFO" &

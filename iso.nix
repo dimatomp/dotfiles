@@ -18,7 +18,7 @@
    boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
    services.tor.enable = true;
-   environment.systemPackages = with pkgs; [ git firefox gparted ];
+   environment.systemPackages = with pkgs; [ git firefox gparted mc ];
    services.xserver = {
      enable = true;
      layout = "us,ru";
