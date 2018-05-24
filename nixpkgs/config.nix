@@ -73,11 +73,9 @@ in {
     haskellSetup = ghc; #haskellPackages.ghcWithPackages (p: with p; [ ]);
     #pulse-secure = callPackage ./pulse-secure.nix {};
     soxMp3 = sox.override { enableLame = true; };
-    wine64 = with import <nixos_unstable> {}; winePackages.unstable.override { wineBuild = "wine64"; };
-    wine32 = with import <nixos_unstable> {}; winePackages.unstable;
     ocamlEnv = buildFHSUserEnv {
       name = "ocaml-env";
-      targetPkgs = pkgs: with pkgs; [ ocaml opam gnum4 gnumake curl patch unzip git gcc_multi gdb vim_configurable ];
+      targetPkgs = pkgs: with pkgs; [ ocaml-ng.ocamlPackages_4_06.ocaml opam gnum4 gnumake curl patch unzip git gcc_multi gdb vim_configurable ];
     };
     cloudcross = libsForQt56.callPackage cloudCross {};
   };
