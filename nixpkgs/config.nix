@@ -1,5 +1,5 @@
 let 
-  pythonPackageOverrides = {fetchurl}: self: super: with super; rec {
+  pythonPackageOverrides = {fetchurl, stdenv}: self: super: with super; rec {
     dawg_python = buildPythonPackage rec {
       name = "DAWG-Python-${version}";
       version = "0.7.2";
@@ -36,6 +36,25 @@ let
         sha256 = "0a795lk2gqj5ar0diwpd0gsgycv83pwlr0a91fki2ch9giaw7bgc";
       };
     };
+
+    pytorch = buildPythonPackage rec {
+      pname = "pytorch";
+      version = "0.4.0";
+      name = "${pname}-${version}";
+      disabled = !isPy36;
+
+      format = "wheel";
+      src = fetchurl {
+        url = "http://download.pytorch.org/whl/cpu/torch-0.4.0-cp36-cp36m-linux_x86_64.whl";
+        sha256 = "01xi8ib9cfn75kvr847n3sz7qp0l1vnzcpvs8a0qljrr9avxcqd5";
+      };
+      propagatedBuildInputs = [ numpy ];
+      fixupPhase = ''
+        for i in $out/lib/${python.libPrefix}/site-packages/torch/*.so; do 
+          patchelf --add-needed ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $i
+        done
+      '';
+    };
   };
   cloudCross = {qtbase, qmake, curl, stdenv, fetchFromGitHub}: 
     stdenv.mkDerivation rec {
@@ -57,16 +76,13 @@ let
     };
 in {
   packageOverrides = pkgs: with pkgs; rec {
-    python3Setup = python3.withPackages (ps: with ps; [ notebook pandas matplotlib scikitlearn ipykernel ]);
+    python3 = pkgs.python3.override { packageOverrides = callPackage pythonPackageOverrides {}; };
+    python3Setup = python3.withPackages (ps: with ps; [ matplotlib pytorch ]); # notebook pandas scikitlearn ipykernel 
+    python2 = pkgs.python2.override { packageOverrides = callPackage pythonPackageOverrides {}; };
     python2Setup = python2.buildEnv.override {
       extraLibs = with python2.pkgs; [ numpy (matplotlib.override {enableGtk2 = true;}) scipy ];
       ignoreCollisions = true;
     };
-      #let python = python2.override { packageOverrides = callPackage pythonPackageOverrides {}; };
-      #in python.buildEnv.override {
-      #  extraLibs = with python.pkgs; [ notebook pandas matplotlib scikitlearn ipykernel pymorphy2 mmh3 protobuf3_2 ];
-      #  ignoreCollisions = true;
-      #};
     texliveSetup = texlive.combine {
       inherit (texlive) scheme-basic collection-langcyrillic collection-langgerman collection-fontsrecommended metafont listings caption adjustbox xkeyval upquote collectbox ucs fancyvrb booktabs ulem extsizes csquotes tabu varwidth floatrow algorithms algorithmicx enumitem setspace biber biblatex iftex lastpage totcount longfigure chngcntr titlesec paratype logreq xstring biblatex-gost was pgf ms filecontents;
     };
