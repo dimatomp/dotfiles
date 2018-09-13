@@ -69,6 +69,9 @@ function curl-track() {
 }
 
 #export PUUSH_API_KEY=DAB228360195BA824019E69DB5934BC7
-
-# OPAM configuration
-. /home/dimatomp/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+if [ -e /home/dimatomp/.nix-profile/etc/profile.d/nix.sh ]; then . /home/dimatomp/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+NIX_PATH=
+for channel in /home/dimatomp/.nix-defexpr/channels/nix*; do
+    NIX_PATH="$(basename $channel)=$channel$([ -z $NIX_PATH ] || echo :$NIX_PATH)"
+done
+export NIX_PATH

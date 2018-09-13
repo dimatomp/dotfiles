@@ -74,7 +74,10 @@ let
         cp ccross-app/doc/ccross $out/man/man1/ccross.1
       '';
     };
+  userspaceOverrides = ./desktop-env-definitions.nix;
 in {
+  allowUnfree = true;
+
   packageOverrides = pkgs: with pkgs; rec {
     python3 = pkgs.python3.override { packageOverrides = callPackage pythonPackageOverrides {}; };
     python3Setup = python3.withPackages (ps: with ps; [ matplotlib pytorch ]); # notebook pandas scikitlearn ipykernel 
@@ -94,7 +97,6 @@ in {
       targetPkgs = pkgs: with pkgs; [ ocaml-ng.ocamlPackages_4_06.ocaml opam gnum4 gnumake curl patch unzip git gcc_multi gdb vim_configurable ];
     };
     cloudcross = libsForQt56.callPackage cloudCross {};
-  };
-
-  allowUnfree = true;
+  } // callPackage userspaceOverrides.packageOverrides {};
+  haskellPackageOverrides = userspaceOverrides.haskellPackageOverrides;
 }

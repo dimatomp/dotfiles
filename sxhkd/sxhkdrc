@@ -1,7 +1,7 @@
 super + shift + Return
     sakura
 super + r
-    dmenu_run -b -fn "Droid Sans Mono:size=8"
+    dmenu_run -b -fn "DejaVu Sans Mono:size=8"
 super + w
     nmcli_dmenu
 super + {j, k}
@@ -26,11 +26,11 @@ super + {1-9}
 super + shift + {1-9}
     tbctl --switch-workspace {1-9}
 super + {W, D}
-    tbctl --add-{workspace,desktop} `dmenu -b -fn "Droid Sans Mono:size=8"`
+    tbctl --add-{workspace,desktop} `dmenu -b -fn "DejaVu Sans Mono:size=8"`
 super + N; {W, D}
-    tbctl --rename-{workspace,desktop} `dmenu -b -fn "Droid Sans Mono:size=8"`
+    tbctl --rename-{workspace,desktop} `dmenu -b -fn "DejaVu Sans Mono:size=8"`
 super + E
-    desk=`bspc query -D | sort | dmenu -b -fn "Droid Sans Mono:size=8"` && bspc window -d $desk
+    desk=`bspc query -D | sort | dmenu -b -fn "DejaVu Sans Mono:size=8"` && bspc window -d $desk
 super + R
     tbctl --remove-desktop
 
@@ -41,7 +41,7 @@ XF86Sleep
 super + S ; H
     systemctl hibernate & $LOCK_SCREEN
 super + S ; {P, R}
-    {poweroff, reboot}
+    systemctl {poweroff, reboot}
 
 XF86AudioRaiseVolume
     amixer set Master 5%+ unmute
@@ -57,9 +57,9 @@ alt + {J, L}; {1-9}
 alt + {H, K}; {1-9}
     bspc window -e {left, up} "0.$((10-{1-9}))"
 alt + {J, L}; backslash
-    bspc window -e {down, right} $(echo `dmenu -b -fn "Droid Sans Mono:size=8" </dev/null` | bc -l)
+    bspc window -e {down, right} $(echo `dmenu -b -fn "DejaVu Sans Mono:size=8" </dev/null` | bc -l)
 alt + {H, K}; backslash
-    bspc window -e {left, up} $(echo "1-(`dmenu -b -fn "Droid Sans Mono:size=8" </dev/null`)" | bc -l)
+    bspc window -e {left, up} $(echo "1-(`dmenu -b -fn "DejaVu Sans Mono:size=8" </dev/null`)" | bc -l)
 alt + {H, J, K, L} ; {0, minus, equal}
     bspc window -R {left, down, up, right} {270, 180, 90}
 

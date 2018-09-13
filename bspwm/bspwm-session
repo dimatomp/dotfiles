@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+. /home/dimatomp/.nix-profile/etc/profile.d/nix.sh
+export LOCK_SCREEN=i3lock
+export _JAVA_AWT_WM_NONREPARENTING=1
+exec /home/dimatomp/.nix-profile/bin/bspwm
