@@ -26,9 +26,9 @@ super + {1-9}
 super + shift + {1-9}
     tbctl --switch-workspace {1-9}
 super + {W, D}
-    tbctl --add-{workspace,desktop} `dmenu -b -fn "DejaVu Sans Mono:size=8"`
+    tbctl --add-{workspace,desktop} `dmenu -b -fn "DejaVu Sans Mono:size=8" </dev/null`
 super + N; {W, D}
-    tbctl --rename-{workspace,desktop} `dmenu -b -fn "DejaVu Sans Mono:size=8"`
+    tbctl --rename-{workspace,desktop} `dmenu -b -fn "DejaVu Sans Mono:size=8" </dev/null`
 super + E
     desk=`bspc query -D | sort | dmenu -b -fn "DejaVu Sans Mono:size=8"` && bspc window -d $desk
 super + R
